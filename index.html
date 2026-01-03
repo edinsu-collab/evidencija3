@@ -383,27 +383,37 @@
         .summary-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             margin-bottom: 20px;
+            text-align: center;
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .summary-item h3 {
-            font-size: 12px;
+        .summary-card h3 {
+            font-size: 14px;
             opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
 
-        .summary-item p {
-            font-size: 20px;
+        .balance-amount {
+            font-size: 48px;
             font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .balance-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .privacy-notice {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #1565c0;
         }
 
         .transaction-item {
@@ -516,13 +526,12 @@
         }
 
         @media (max-width: 480px) {
-            .summary-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
             .card {
                 padding: 20px;
+            }
+            
+            .balance-amount {
+                font-size: 36px;
             }
         }
     </style>
@@ -652,24 +661,16 @@
             <!-- Pregled -->
             <div id="pregledContent" class="content-card">
                 <div class="card">
-                    <h2>📊 Pregled</h2>
+                    <h2>📊 Moje Transakcije</h2>
+                    
+                    <div class="privacy-notice">
+                        🔒 <strong>Privatnost:</strong> Vidite samo svoje transakcije i svoj lični bilans.
+                    </div>
                     
                     <div class="summary-card">
-                        <h3>Finansijski Pregled</h3>
-                        <div class="summary-grid">
-                            <div class="summary-item">
-                                <h3>Prilivi</h3>
-                                <p id="ukupniPrilivi">0 €</p>
-                            </div>
-                            <div class="summary-item">
-                                <h3>Odlivi</h3>
-                                <p id="ukupniOdlivi">0 €</p>
-                            </div>
-                            <div class="summary-item">
-                                <h3>Bilans</h3>
-                                <p id="bilans">0 €</p>
-                            </div>
-                        </div>
+                        <h3>Moj Bilans</h3>
+                        <div class="balance-amount" id="bilans">0 €</div>
+                        <div class="balance-label">Moji Prilivi - Moji Odlivi</div>
                     </div>
 
                     <div id="transactionList">
@@ -731,7 +732,7 @@
                 </button>
                 <button class="nav-item" onclick="switchTab('pregled')">
                     <div class="nav-icon">📊</div>
-                    <div class="nav-label">Pregled</div>
+                    <div class="nav-label">Moje</div>
                 </button>
                 <button class="nav-item" onclick="switchTab('podesavanja')">
                     <div class="nav-icon">⚙️</div>
@@ -940,12 +941,18 @@
                 if (Array.isArray(transactions)) {
                     appData.transactions = transactions;
                     saveAppData();
-                    displayTransactions(transactions);
-                    updateSummary(transactions);
+                    
+                    // Filter - prikaži samo transakcije trenutnog korisnika
+                    const myTransactions = transactions.filter(t => t.osobaEmail === currentUser.email);
+                    displayTransactions(myTransactions);
+                    
+                    // Bilans - koristi samo MOJe transakcije (personalizovano)
+                    updateBalance(myTransactions);
                 }
             } catch (error) {
-                displayTransactions(appData.transactions);
-                updateSummary(appData.transactions);
+                const myTransactions = appData.transactions.filter(t => t.osobaEmail === currentUser.email);
+                displayTransactions(myTransactions);
+                updateBalance(myTransactions);
             }
         }
 
@@ -1114,13 +1121,13 @@
             const list = document.getElementById('transactionList');
             
             if (transactions.length === 0) {
-                list.innerHTML = '<div class="empty-state"><h3>Nema transakcija</h3></div>';
+                list.innerHTML = '<div class="empty-state"><h3>Nema vaših transakcija</h3><p>Kada dodate priliv ili odliv, pojaviće se ovdje</p></div>';
                 return;
             }
             
             const sorted = [...transactions].sort((a, b) => new Date(b.datum) - new Date(a.datum));
             
-            list.innerHTML = sorted.slice(0, 50).map(t => {
+            list.innerHTML = sorted.map(t => {
                 const date = new Date(t.datum);
                 const formattedDate = date.toLocaleDateString('sr-Latn-ME', {
                     day: 'numeric',
@@ -1141,20 +1148,20 @@
                         </div>
                         <div class="transaction-details">${formattedDate}</div>
                         ${t.komentar ? `<div class="transaction-details">💬 ${t.komentar}</div>` : ''}
-                        <div class="transaction-meta">👤 ${t.osoba}</div>
+                        <div class="transaction-meta">📅 ${formattedDate}</div>
                     </div>
                 `;
             }).join('');
         }
 
-        function updateSummary(transactions) {
+        function updateBalance(transactions) {
+            // Bilans samo za trenutnog korisnika
             const prilivi = transactions.filter(t => t.type === 'priliv').reduce((sum, t) => sum + parseFloat(t.iznos), 0);
             const odlivi = transactions.filter(t => t.type === 'odliv').reduce((sum, t) => sum + parseFloat(t.iznos), 0);
             const bilans = prilivi - odlivi;
             
-            document.getElementById('ukupniPrilivi').textContent = prilivi.toFixed(0) + ' €';
-            document.getElementById('ukupniOdlivi').textContent = odlivi.toFixed(0) + ' €';
-            document.getElementById('bilans').textContent = bilans.toFixed(0) + ' €';
+            // Prikaži personalizovani bilans
+            document.getElementById('bilans').textContent = bilans.toFixed(2) + ' €';
         }
 
         function switchTab(tabName) {
