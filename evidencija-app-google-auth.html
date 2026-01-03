@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Evidencija">
+    
+    <title>Evidencija Priliva i Odliva</title>
+    
+    <!-- Google Sign-In Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Inline PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRXZpZGVuY2lqYSBQcmlsaXZhIGkgT2RsaXZhIiwic2hvcnRfbmFtZSI6IkV2aWRlbmNpamEiLCJkZXNjcmlwdGlvbiI6IkFwbGlrYWNpamEgemEgcHJhxIdlbmplIHByaWxpdmEgaSBvZGxpdmEgbm92Y2EiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzY2N2VlYSIsInRoZW1lX2NvbG9yIjoiIzY2N2VlYSIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJyUzRSUzQ2RlZnMlM0UlM0NsaW5lYXJHcmFkaWVudCBpZD0nZ3JhZCcgeDElM0QnMCUyNScgeTE9JzAlMjUnIHgyPScxMDAlMjUnIHkyPScxMDAlMjUnJTNFJTNDc3RvcCBvZmZzZXQ9JzAlMjUnIHN0eWxlPSdzdG9wLWNvbG9yOiUyMzY2N2VlYTtzdG9wLW9wYWNpdHk6MScgLyUzRSUzQ3N0b3Agb2Zmc2V0PScxMDAlMjUnIHN0eWxlPSdzdG9wLWNvbG9yOiUyMzc2NGJhMjtzdG9wLW9wYWNpdHk6MScgLyUzRSUzQy9saW5lYXJHcmFkaWVudCUzRSUzQy9kZWZzJTNFJTNDcmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgZmlsbD0ndXJsKCUyM2dyYWQpJyByeD0nMTAwJy8lM0UlM0N0ZXh0IHg9JzI1NicgeT0nMzIwJyBmb250LXNpemU9JzI4MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nd2hpdGUnIGZvbnQtZmFtaWx5PSdBcmlhbCxzYW5zLXNlcmlmJyBmb250LXdlaWdodD0nYm9sZCclM0UlRjAlOUYlOTIlQjAlM0MvdGV4dCUzRSUzQy9zdmclM0UiLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
+    
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23764ba2;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='192' height='192' fill='url(%23grad)' rx='40'/%3E%3Ctext x='96' y='125' font-size='100' text-anchor='middle' fill='white'%3E💰%3C/text%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .install-prompt {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .install-prompt.show {
+            display: flex;
+        }
+
+        .install-icon {
+            font-size: 40px;
+        }
+
+        .install-text {
+            flex: 1;
+        }
+
+        .install-text h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .install-text p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .install-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .close-install {
+            color: #999;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .app-header {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+
+        .user-details {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-details h2 {
+            font-size: 15px;
+            color: #333;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: none;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 3px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .content-card {
+            display: none;
+        }
+
+        .content-card.active {
+            display: block;
+        }
+
+        .success-message, .error-message, .info-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        .success-message {
+            background: #10b981;
+            color: white;
+        }
+
+        .error-message {
+            background: #ef4444;
+            color: white;
+        }
+
+        .info-message {
+            background: #3b82f6;
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .category-manager {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-manager h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        .add-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .category-item {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .category-item.priliv {
+            border-left: 3px solid #10b981;
+        }
+
+        .category-item.odliv {
+            border-left: 3px solid #ef4444;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-item h3 {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .summary-item p {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .transaction-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .transaction-item.priliv {
+            border-left-color: #10b981;
+        }
+
+        .transaction-item.odliv {
+            border-left-color: #ef4444;
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .transaction-amount.priliv {
+            color: #10b981;
+        }
+
+        .transaction-amount.odliv {
+            color: #ef4444;
+        }
+
+        .transaction-details {
+            color: #666;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .transaction-meta {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #ddd;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 15px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .vehicle-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        #googleSignInDiv {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .login-info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #1565c0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-icon">📱</div>
+        <div class="install-text">
+            <h3>Instaliraj aplikaciju</h3>
+            <p>Dodaj na početni ekran</p>
+        </div>
+        <button class="install-btn" id="installBtn">Instaliraj</button>
+        <span class="close-install" id="closeInstall">×</span>
+    </div>
+
+    <div class="container">
+        <!-- Setup Screen -->
+        <div id="setupScreen" class="card">
+            <h1>🔧 Podešavanje</h1>
+            
+            <div class="form-group">
+                <label>Google Apps Script URL *</label>
+                <input type="url" id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec">
+            </div>
+
+            <button class="btn" onclick="saveApiUrl()">Sačuvaj i Nastavi</button>
+            
+            <div id="setupError" class="error-message"></div>
+            <div id="setupInfo" class="info-message"></div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginScreen" class="card" style="display: none;">
+            <h1>🔐 Prijava sa Google Nalogom</h1>
+            
+            <div class="login-info">
+                <strong>🔒 Sigurna autentifikacija</strong><br>
+                Prijavite se sa vašim Google nalogom. Samo autorizovani korisnici mogu pristupiti aplikaciji.
+            </div>
+            
+            <!-- Google Sign-In Button -->
+            <div id="googleSignInDiv"></div>
+        </div>
+
+        <!-- Main App -->
+        <div id="appScreen" style="display: none;">
+            <div class="app-header">
+                <div class="user-info">
+                    <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+                    <div class="user-details">
+                        <h2 id="userName"></h2>
+                        <p id="userEmail"></p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">Odjava</button>
+            </div>
+
+            <!-- Priliv -->
+            <div id="prilivContent" class="content-card active">
+                <div class="card">
+                    <h2 style="color: #10b981;">➕ Novi Priliv</h2>
+                    <div id="prilivSuccess" class="success-message"></div>
+                    <div id="prilivError" class="error-message"></div>
+                    
+                    <form id="prilivForm">
+                        <div class="form-group">
+                            <label>Datum *</label>
+                            <input type="date" id="prilivDatum" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tip Priliva *</label>
+                            <select id="prilivTip" required>
+                                <option value="">-- Odaberite --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Iznos (€) *</label>
+                            <input type="number" id="prilivIznos" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Komentar</label>
+                            <textarea id="prilivKomentar" placeholder="Dodatne napomene..."></textarea>
+                        </div>
+                        <button type="submit" class="btn" id="prilivSubmitBtn">Sačuvaj Priliv</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Odliv -->
+            <div id="odlivContent" class="content-card">
+                <div class="card">
+                    <h2 style="color: #ef4444;">➖ Novi Odliv</h2>
+                    <div id="odlivSuccess" class="success-message"></div>
+                    <div id="odlivError" class="error-message"></div>
+                    
+                    <form id="odlivForm">
+                        <div class="form-group">
+                            <label>Datum *</label>
+                            <input type="date" id="odlivDatum" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tip Odliva *</label>
+                            <select id="odlivTip" required>
+                                <option value="">-- Odaberite --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Iznos (€) *</label>
+                            <input type="number" id="odlivIznos" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Vozilo</label>
+                            <select id="odlivVozilo">
+                                <option value="">-- Nije vezano za vozilo --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Komentar</label>
+                            <textarea id="odlivKomentar" placeholder="Dodatne napomene..."></textarea>
+                        </div>
+                        <button type="submit" class="btn" id="odlivSubmitBtn">Sačuvaj Odliv</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pregled -->
+            <div id="pregledContent" class="content-card">
+                <div class="card">
+                    <h2>📊 Pregled</h2>
+                    
+                    <div class="summary-card">
+                        <h3>Finansijski Pregled</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <h3>Prilivi</h3>
+                                <p id="ukupniPrilivi">0 €</p>
+                            </div>
+                            <div class="summary-item">
+                                <h3>Odlivi</h3>
+                                <p id="ukupniOdlivi">0 €</p>
+                            </div>
+                            <div class="summary-item">
+                                <h3>Bilans</h3>
+                                <p id="bilans">0 €</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="transactionList">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Učitavanje...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Podešavanja -->
+            <div id="podesavanjaContent" class="content-card">
+                <div class="card">
+                    <h2>⚙️ Podešavanja</h2>
+                    
+                    <div class="category-manager">
+                        <h3 style="color: #10b981;">Tipovi Priliva</h3>
+                        <div class="input-group">
+                            <input type="text" id="newPrilivType" placeholder="Novi tip...">
+                            <button class="add-btn" onclick="addCategory('priliv')">+</button>
+                        </div>
+                        <div class="category-list" id="prilivTypeList"></div>
+                    </div>
+
+                    <div class="category-manager">
+                        <h3 style="color: #ef4444;">Tipovi Odliva</h3>
+                        <div class="input-group">
+                            <input type="text" id="newOdlivType" placeholder="Novi tip...">
+                            <button class="add-btn" onclick="addCategory('odliv')">+</button>
+                        </div>
+                        <div class="category-list" id="odlivTypeList"></div>
+                    </div>
+
+                    <div class="category-manager">
+                        <h3 style="color: #3b82f6;">Vozila</h3>
+                        <div class="input-group">
+                            <input type="text" id="newVehicle" placeholder="Npr. BMW X5">
+                            <button class="add-btn" onclick="addVehicle()">+</button>
+                        </div>
+                        <div class="category-list" id="vehicleList"></div>
+                    </div>
+
+                    <button class="btn" onclick="resetSetup()" style="background: #ff4757; margin-top: 20px;">
+                        Resetuj Aplikaciju
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Nav -->
+            <div class="bottom-nav">
+                <button class="nav-item active" onclick="switchTab('priliv')">
+                    <div class="nav-icon">➕</div>
+                    <div class="nav-label">Priliv</div>
+                </button>
+                <button class="nav-item" onclick="switchTab('odliv')">
+                    <div class="nav-icon">➖</div>
+                    <div class="nav-label">Odliv</div>
+                </button>
+                <button class="nav-item" onclick="switchTab('pregled')">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Pregled</div>
+                </button>
+                <button class="nav-item" onclick="switchTab('podesavanja')">
+                    <div class="nav-icon">⚙️</div>
+                    <div class="nav-label">Postavke</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ VAŽNO: Zamijenite ovo sa vašim pravim Google Client ID-om
+        const GOOGLE_CLIENT_ID = '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.apps.googleusercontent.com';
+
+        // PWA Install
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.add('show');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                document.getElementById('installPrompt').classList.remove('show');
+            }
+        });
+
+        document.getElementById('closeInstall').addEventListener('click', () => {
+            document.getElementById('installPrompt').classList.remove('show');
+        });
+
+        // App State
+        let API_URL = '';
+        let currentUser = null;
+        let appData = {
+            prilivTypes: ['Prodaja', 'Plaćanje od klijenta', 'Povrat', 'Ostalo'],
+            odlivTypes: ['Gorivo', 'Održavanje', 'Plate', 'Režije', 'Ostalo'],
+            vehicles: ['Mercedes Sprinter - PG-001-AA', 'Fiat Ducato - PG-002-BB'],
+            transactions: []
+        };
+
+        window.onload = function() {
+            const savedUrl = localStorage.getItem('googleSheetsApiUrl');
+            const savedUser = localStorage.getItem('currentUser');
+            const savedData = localStorage.getItem('appData');
+            
+            if (savedData) {
+                appData = { ...appData, ...JSON.parse(savedData) };
+            }
+            
+            if (savedUrl) {
+                API_URL = savedUrl;
+                
+                if (savedUser) {
+                    currentUser = JSON.parse(savedUser);
+                    showApp();
+                } else {
+                    document.getElementById('setupScreen').style.display = 'none';
+                    document.getElementById('loginScreen').style.display = 'block';
+                    initializeGoogleSignIn();
+                }
+            }
+        };
+
+        // Initialize Google Sign-In
+        function initializeGoogleSignIn() {
+            if (typeof google === 'undefined') {
+                setTimeout(initializeGoogleSignIn, 100);
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleSignIn,
+                auto_select: false
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById('googleSignInDiv'),
+                {
+                    theme: 'filled_blue',
+                    size: 'large',
+                    text: 'signin_with',
+                    shape: 'rectangular',
+                    logo_alignment: 'left',
+                    width: 280
+                }
+            );
+        }
+
+        // Handle Google Sign-In Response
+        function handleGoogleSignIn(response) {
+            const credential = response.credential;
+            const payload = parseJwt(credential);
+            
+            currentUser = {
+                name: payload.name,
+                email: payload.email,
+                avatar: payload.picture,
+                googleId: payload.sub
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            showApp();
+        }
+
+        // Parse JWT token
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        function saveApiUrl() {
+            const url = document.getElementById('apiUrl').value.trim();
+            
+            if (!url || !url.endsWith('/exec')) {
+                showMessage('setupError', 'Unesite validan URL koji završava sa /exec', 'error');
+                return;
+            }
+
+            API_URL = url;
+            localStorage.setItem('googleSheetsApiUrl', url);
+            
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'block';
+            initializeGoogleSignIn();
+        }
+
+        function showApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userAvatar').src = currentUser.avatar;
+            
+            init();
+        }
+
+        function logout() {
+            if (confirm('Da li ste sigurni?')) {
+                localStorage.removeItem('currentUser');
+                google.accounts.id.disableAutoSelect();
+                currentUser = null;
+                location.reload();
+            }
+        }
+
+        function resetSetup() {
+            if (confirm('Svi lokalni podaci će biti obrisani.')) {
+                localStorage.clear();
+                google.accounts.id.disableAutoSelect();
+                location.reload();
+            }
+        }
+
+        async function init() {
+            setTodayDates();
+            renderCategories();
+            renderVehicles();
+            updateSelects();
+            await loadTransactions();
+        }
+
+        function setTodayDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('prilivDatum').value = today;
+            document.getElementById('odlivDatum').value = today;
+        }
+
+        async function apiGet(action) {
+            try {
+                const url = `${API_URL}?action=${action}&t=${Date.now()}`;
+                const response = await fetch(url);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        async function apiPost(action, data) {
+            try {
+                const url = `${API_URL}?action=${action}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        async function loadTransactions() {
+            try {
+                const transactions = await apiGet('getTransactions');
+                if (Array.isArray(transactions)) {
+                    appData.transactions = transactions;
+                    saveAppData();
+                    displayTransactions(transactions);
+                    updateSummary(transactions);
+                }
+            } catch (error) {
+                displayTransactions(appData.transactions);
+                updateSummary(appData.transactions);
+            }
+        }
+
+        function saveAppData() {
+            localStorage.setItem('appData', JSON.stringify(appData));
+        }
+
+        function addCategory(type) {
+            const inputId = type === 'priliv' ? 'newPrilivType' : 'newOdlivType';
+            const input = document.getElementById(inputId);
+            const value = input.value.trim();
+            
+            if (!value) return;
+            
+            if (type === 'priliv') {
+                if (!appData.prilivTypes.includes(value)) appData.prilivTypes.push(value);
+            } else {
+                if (!appData.odlivTypes.includes(value)) appData.odlivTypes.push(value);
+            }
+            
+            input.value = '';
+            saveAppData();
+            renderCategories();
+            updateSelects();
+        }
+
+        function deleteCategory(type, value) {
+            if (!confirm('Da li ste sigurni?')) return;
+            
+            if (type === 'priliv') {
+                appData.prilivTypes = appData.prilivTypes.filter(t => t !== value);
+            } else {
+                appData.odlivTypes = appData.odlivTypes.filter(t => t !== value);
+            }
+            
+            saveAppData();
+            renderCategories();
+            updateSelects();
+        }
+
+        function addVehicle() {
+            const input = document.getElementById('newVehicle');
+            const value = input.value.trim();
+            
+            if (!value || appData.vehicles.includes(value)) return;
+            
+            appData.vehicles.push(value);
+            input.value = '';
+            saveAppData();
+            renderVehicles();
+            updateSelects();
+        }
+
+        function deleteVehicle(value) {
+            if (!confirm('Da li ste sigurni?')) return;
+            
+            appData.vehicles = appData.vehicles.filter(v => v !== value);
+            saveAppData();
+            renderVehicles();
+            updateSelects();
+        }
+
+        function renderCategories() {
+            document.getElementById('prilivTypeList').innerHTML = appData.prilivTypes.map(type => `
+                <div class="category-item priliv">
+                    <span>${type}</span>
+                    <button class="delete-btn" onclick="deleteCategory('priliv', '${type.replace(/'/g, "\\'")}')">×</button>
+                </div>
+            `).join('');
+            
+            document.getElementById('odlivTypeList').innerHTML = appData.odlivTypes.map(type => `
+                <div class="category-item odliv">
+                    <span>${type}</span>
+                    <button class="delete-btn" onclick="deleteCategory('odliv', '${type.replace(/'/g, "\\'")}')">×</button>
+                </div>
+            `).join('');
+        }
+
+        function renderVehicles() {
+            document.getElementById('vehicleList').innerHTML = appData.vehicles.map(v => `
+                <div class="category-item">
+                    <span>🚗 ${v}</span>
+                    <button class="delete-btn" onclick="deleteVehicle('${v.replace(/'/g, "\\'")}')">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateSelects() {
+            document.getElementById('prilivTip').innerHTML = 
+                '<option value="">-- Odaberite --</option>' +
+                appData.prilivTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+            
+            document.getElementById('odlivTip').innerHTML = 
+                '<option value="">-- Odaberite --</option>' +
+                appData.odlivTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+            
+            document.getElementById('odlivVozilo').innerHTML = 
+                '<option value="">-- Nije vezano za vozilo --</option>' +
+                appData.vehicles.map(v => `<option value="${v}">${v}</option>`).join('');
+        }
+
+        document.getElementById('prilivForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('prilivSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Čuvanje...';
+            
+            try {
+                const transaction = {
+                    type: 'priliv',
+                    datum: document.getElementById('prilivDatum').value,
+                    tip: document.getElementById('prilivTip').value,
+                    iznos: parseFloat(document.getElementById('prilivIznos').value),
+                    komentar: document.getElementById('prilivKomentar').value,
+                    osoba: currentUser.name,
+                    osobaEmail: currentUser.email
+                };
+                
+                await apiPost('addTransaction', transaction);
+                showSuccess('prilivSuccess', '✅ Priliv sačuvan!');
+                this.reset();
+                setTodayDates();
+                await loadTransactions();
+            } catch (error) {
+                showError('prilivError', 'Greška: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sačuvaj Priliv';
+            }
+        });
+
+        document.getElementById('odlivForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('odlivSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Čuvanje...';
+            
+            try {
+                const transaction = {
+                    type: 'odliv',
+                    datum: document.getElementById('odlivDatum').value,
+                    tip: document.getElementById('odlivTip').value,
+                    iznos: parseFloat(document.getElementById('odlivIznos').value),
+                    vozilo: document.getElementById('odlivVozilo').value,
+                    komentar: document.getElementById('odlivKomentar').value,
+                    osoba: currentUser.name,
+                    osobaEmail: currentUser.email
+                };
+                
+                await apiPost('addTransaction', transaction);
+                showSuccess('odlivSuccess', '✅ Odliv sačuvan!');
+                this.reset();
+                setTodayDates();
+                await loadTransactions();
+            } catch (error) {
+                showError('odlivError', 'Greška: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sačuvaj Odliv';
+            }
+        });
+
+        function displayTransactions(transactions) {
+            const list = document.getElementById('transactionList');
+            
+            if (transactions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><h3>Nema transakcija</h3></div>';
+                return;
+            }
+            
+            const sorted = [...transactions].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+            
+            list.innerHTML = sorted.slice(0, 50).map(t => {
+                const date = new Date(t.datum);
+                const formattedDate = date.toLocaleDateString('sr-Latn-ME', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                
+                return `
+                    <div class="transaction-item ${t.type}">
+                        <div class="transaction-header">
+                            <div class="transaction-type">
+                                ${t.type === 'priliv' ? '➕' : '➖'} ${t.tip}
+                                ${t.vozilo ? `<span class="vehicle-badge">🚗 ${t.vozilo}</span>` : ''}
+                            </div>
+                            <div class="transaction-amount ${t.type}">
+                                ${t.type === 'priliv' ? '+' : '-'}${parseFloat(t.iznos).toFixed(2)} €
+                            </div>
+                        </div>
+                        <div class="transaction-details">${formattedDate}</div>
+                        ${t.komentar ? `<div class="transaction-details">💬 ${t.komentar}</div>` : ''}
+                        <div class="transaction-meta">👤 ${t.osoba}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateSummary(transactions) {
+            const prilivi = transactions.filter(t => t.type === 'priliv').reduce((sum, t) => sum + parseFloat(t.iznos), 0);
+            const odlivi = transactions.filter(t => t.type === 'odliv').reduce((sum, t) => sum + parseFloat(t.iznos), 0);
+            const bilans = prilivi - odlivi;
+            
+            document.getElementById('ukupniPrilivi').textContent = prilivi.toFixed(0) + ' €';
+            document.getElementById('ukupniOdlivi').textContent = odlivi.toFixed(0) + ' €';
+            document.getElementById('bilans').textContent = bilans.toFixed(0) + ' €';
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.content-card').forEach(c => c.classList.remove('active'));
+            
+            event.target.closest('.nav-item').classList.add('active');
+            document.getElementById(tabName + 'Content').classList.add('active');
+
+            if (tabName === 'pregled') loadTransactions();
+        }
+
+        function showSuccess(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 3000);
+        }
+
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
+        }
+
+        function showMessage(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = type === 'info' ? 'info-message' : (type === 'error' ? 'error-message' : 'success-message');
+            el.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
